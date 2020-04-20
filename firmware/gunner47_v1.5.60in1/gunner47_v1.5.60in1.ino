@@ -172,6 +172,7 @@
 #include <WiFiManager.h>
 #include "CaptivePortalManager.h"
 #include <WiFiUdp.h>
+#include <ESP8266mDNS.h>
 #include <EEPROM.h>
 #include "Types.h"
 #include "timerMinim.h"
@@ -200,6 +201,8 @@ CRGB leds[NUM_LEDS];
 WiFiManager wifiManager;
 WiFiServer wifiServer(ESP_HTTP_PORT);
 WiFiUDP Udp;
+
+ESP8266WebServer *http; // http server
 
 #ifdef USE_NTP
 WiFiUDP ntpUDP;
@@ -481,7 +484,19 @@ void setup()
   ESP.wdtFeed();
   #endif
 
-
+  // TODO use FLAG USE_WEBSERVER
+  // Set up mDNS responder
+  // TODO: configurable ClientID for MDNS
+  String clientId = "FireLamp_" + String(ESP.getChipId(), HEX)+".local";
+  LOG.println("client: "+clientId);
+  if (!MDNS.begin(clientId)) {
+    LOG.println("Error setting up MDNS responder!");
+  }
+  // Set up webserver
+  initWebserver();
+  // Add service to MDNS-SD
+  MDNS.addService("http", "tcp", ESP_HTTP_PORT);
+  
   // ОСТАЛЬНОЕ
   memset(matrixValue, 0, sizeof(matrixValue));
   randomSeed(micros());
@@ -493,7 +508,7 @@ void setup()
 
 
 void loop()
-{
+{  
   parseUDP();
   if (Painting == 0) {
   effectsTick();
@@ -511,6 +526,14 @@ void loop()
     buttonTick();
   }
   #endif
+
+  // TODO use FLAG USE_WEBSERVER
+  MDNS.update();
+  if (http !=NULL) {
+    http->handleClient();
+  } else {
+    LOG.println("error: no http client!");
+  }
 
   #ifdef OTA
   otaManager.HandleOtaUpdate();                             // ожидание и обработка команды на обновление прошивки по воздуху
@@ -556,4 +579,6 @@ void loop()
   #endif
   }
   ESP.wdtFeed();                                            // пнуть собаку
+
+  yield();
 }
