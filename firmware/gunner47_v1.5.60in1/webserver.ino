@@ -3,28 +3,122 @@ void initWebserver() {
   //http= new ESP8266WebServer(8080);
 
   if (http !=NULL) {
+
+    // TODO USE_WEBUPDATE
+    httpUpdater = new(ESP8266HTTPUpdateServer);
+    #ifdef WEBAUTH
+    // TODO: Definitionen für User/Passwort
+    httpUpdater->setup(http, clientId.c_str(), clientId.c_str());
+    #else
+    httpUpdater->setup(http);
+    #endif
+    
+    //http->on("/update", routeUpload);
+
     /** 404 */
     http->onNotFound(routeNotFound);
 
-   /** root page */
-   http->on("/", routeHome);
+    /** root page */
+    http->on("/", routeHome);
 
-   /** get config JSON */
-   http->on("/getconfig", routeGetConfig); 
+    /** get config JSON */
+    http->on("/getconfig", routeGetConfig); 
 
-   /** send confid */
-   http->on("/setconfig", routeSetConfig); 
+    /** send confid */
+    http->on("/setconfig", routeSetConfig); 
 
     
-  // TODO
+    // TODO
+
+    /** stub for favicon  **/
+    http->on("/favicon.ico", []() {
+      // TODO
+      http->send(404, "text/plain", "none");
+    });
 
     http->begin();
+    
     //LOG.println("Webserver startet at url: http://%s.local/\r\n", clientId.c_str());
   } else {
     LOG.println("Error creating webserver!");
   }
 }
 
+/*
+void routeUpload() {
+  String html = "";
+    html += "<html lang='de'>";
+      html += "<head>";
+        html += "<meta charset='utf-8'>";
+        html += "<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>";
+        html += "<title>FireLamp Firmware Update</title>";
+        html += "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin='anonymous'>";
+      html += "</head>";
+      html += "<body>";
+        html += "<nav class='navbar navbar-expand-md navbar-dark bg-dark mb-4'>";
+          html += "<div class='container'>";
+            html += "<a href='/' class='navbar-brand'>FireLamp Hauptmen&uuml;</a>";
+          html += "</div>";
+        html += "</nav>";
+        html += "<main role='main' class='container'>";
+          html += "<div class='jumbotron'>";
+            html += "<form id='data' action='' method='POST' enctype='multipart/form-data'>";
+              html += "<div class='input-group mb-3'>";
+                html += "<div class='custom-file'>";
+                  html += "<input type='file' accept='.bin' class='custom-file-input' id='inputGroupFile04' name='firmware'>";
+                  html += "<label class='custom-file-label' for='inputGroupFile04'>Firmware</label>";
+                html += "</div>";
+                html += "<div class='input-group-append'>";
+                  html += "<button style='width:200px;' class='btn btn-danger' type='submit'>Update Firmware</button>";
+                html += "</div>";
+              html += "</div>";
+            html += "</form>";
+            html += "<form id='data' action='' method='POST' enctype='multipart/form-data'>";
+              html += "<div class='input-group mb-3'>";
+                html += "<div class='custom-file'>";
+                  html += "<input type='file' accept='.bin' class='custom-file-input' id='inputGroupFile04' name='filesystem'>";
+                  html += "<label class='custom-file-label' for='inputGroupFile04'>SPIFFS</label>";
+                html += "</div>";
+                html += "<div class='input-group-append'>";
+                  html += "<button style='width:200px;' class='btn btn-danger' type='submit'>Update Filesystem</button>";
+                html += "</div>";
+              html += "</div>";
+            html += "</form>";
+            html += "<form>";
+              html += "<div class='form-group'>";
+                html += "<button type='button' class='btn btn-Primary' onclick='window.location.href=\"/\"'>Back</button>";
+              html += "</div>";
+            html += "</form>";
+          html += "</div>";
+        html += "</main>";
+      html += "</body>";
+    html += "</html>";
+
+
+  http->send(200, "text/html; charset=utf-8", html); 
+
+     <!DOCTYPE html>
+     <html lang='en'>
+     <head>
+         <meta charset='utf-8'>
+         <meta name='viewport' content='width=device-width,initial-scale=1'/>
+     </head>
+     <body>
+     <form method='POST' action='' enctype='multipart/form-data'>
+         Firmware:<br>
+         <input type='file' accept='.bin' name='firmware'>
+         <input type='submit' value='Update Firmware'>
+     </form>
+     <form method='POST' action='' enctype='multipart/form-data'>
+         FileSystem:<br>
+         <input type='file' accept='.bin' name='filesystem'>
+         <input type='submit' value='Update FileSystem'>
+     </form>
+     </body>
+     </html>
+
+}
+*/
 
 /*  
     /** страница настройка будильника * /
@@ -44,6 +138,7 @@ void initWebserver() {
  */
 void responseHtml(String out, String title = "FireLamp", int code = 200) {
   #ifdef WEBAUTH
+  // TODO: Definitionen für User/Passwort
   if (!http->authenticate(clientId.c_str(), clientId.c_str())) {
       return http->requestAuthentication();
   }
@@ -168,26 +263,69 @@ void routeHome(){
       out += "<div class='ui-field-contain'>";
         out += "<label for='currentMode'>Effekt:</label>";
         out += "<select name='currentMode' id='currentMode' data-mini='true'>";
-          
-          out += "<option value='0'>Konfetti</option>";
-          out += "<option value='1'>Feuer</option>";
-          out += "<option value='2'>Regenbogen vertikal</option>";
-          out += "<option value='3'>Regenbogen horizontal</option>";
-          out += "<option value='4'>Farbwechsel</option>";
-          out += "<option value='5'>Wahnsinn 3D</option>";
-          out += "<option value='6'>Wolken 3D</option>";
-          out += "<option value='7'>Lava 3D</option>";
-          out += "<option value='8'>Plasma 3D</option>";
-          out += "<option value='9'>Regenbogen 3D</option>";
-          out += "<option value='10'>Pfau 3D</option>";
-          out += "<option value='11'>Zebra 3D</option>";
-          out += "<option value='12'>Wald 3D</option>";
-          out += "<option value='13'>Ozean 3D</option>";
-          out += "<option value='14'>Farbe</option>";
-          out += "<option value='15'>Schneefall</option>";
-          out += "<option value='16'>Matrix</option>";
-          out += "<option value='17'>Glühwürmchen</option>";
-          out += "<option value='18'>Demo</option>";
+
+          out += "<option value='0'>0. White Color</option>";
+          out += "<option value='1'>1. Color</option>";
+          out += "<option value='2'>2. Madness</option>";
+          out += "<option value='3'>3. Clouds</option>";
+          out += "<option value='4'>4. Lava</option>";
+          out += "<option value='5'>5. Plasma</option>";
+          out += "<option value='6'>6. Rainbow 3D</option>";
+          out += "<option value='7'>7. Peacock</option>";
+          out += "<option value='8'>8. Zebra</option>";
+          out += "<option value='9'>9. Forest</option>";
+          out += "<option value='10'>10. Ocean</option>";
+          out += "<option value='11'>11. Bouncing balls</option>";
+          out += "<option value='12'>12. White bouncing balls</option>";
+          out += "<option value='13'>13. Balls with a train</option>";
+          out += "<option value='14'>14. Spirals</option>";
+          out += "<option value='15'>15. Prismata</option>";
+          out += "<option value='16'>16. Flock</option>";
+          out += "<option value='17'>17. Flock and predator</option>";
+          out += "<option value='18'>18. Sinusoid</option>";
+          out += "<option value='19'>19. Metaballs</option>";
+          out += "<option value='20'>20. Matrix</option>";
+          out += "<option value='21'>21. Fire 2018</option>";
+          out += "<option value='22'>22. Fire</option>";
+          out += "<option value='23'>23. White Fire</option>";
+          out += "<option value='24'>24. Blue Fire</option>";
+          out += "<option value='25'>25. Green Fire</option>";
+          out += "<option value='26'>26. Whirls of flame</option>";
+          out += "<option value='27'>27. Color whirls</option>";
+          out += "<option value='28'>28. Waterfall</option>";
+          out += "<option value='29'>29. White waterfall</option>";
+          out += "<option value='30'>30. Waterfall 4 in 1</option>";
+          out += "<option value='31'>31. Pool</option>";
+          out += "<option value='32'>32. Slow pulse</option>";
+          out += "<option value='33'>33. Fast pulse</option>";
+          out += "<option value='34'>34. Rainbow pulse</option>";
+          out += "<option value='35'>35. White pulse</option>";
+          out += "<option value='36'>36. Comet</option>";
+          out += "<option value='37'>37. White comet</option>";
+          out += "<option value='38'>38. Plain Comet</option>";
+          out += "<option value='39'>39. Pulsating comet</option>";
+          out += "<option value='40'>40. Two comets</option>";
+          out += "<option value='41'>41. Three comets</option>";
+          out += "<option value='42'>42. Soaring fire</option>";
+          out += "<option value='43'>43. Top fire</option>";
+          out += "<option value='44'>44. Rainbow snake</option>";
+          out += "<option value='45'>45. Confetti</option>";
+          out += "<option value='46'>46. Rainbow vertical</option>";
+          out += "<option value='47'>47. Rainbow horizontal</option>";
+          out += "<option value='48'>48. Rainbow diagonal</option>";
+          out += "<option value='49'>49. Waves</option>";
+          out += "<option value='50'>50. Snowfall</option>";
+          out += "<option value='51'>51. Colored rain</option>";
+          out += "<option value='52'>52. Snowstorm</option>";
+          out += "<option value='53'>53. Starfall</option>";
+          out += "<option value='54'>54. Fireflies</option>";
+          out += "<option value='55'>55. Fireflies with a train</option>";
+          out += "<option value='56'>56. Paintball</option>";
+          out += "<option value='57'>57. Wandering Cube</option>";
+          out += "<option value='58'>58. Change of color</option>";
+          out += "<option value='59'>59. Cloud in the jar</option>";
+          out += "<option value='60'>60. Thunder in the jar</option>";
+          out += "<option value='61'>61. Ticker</option>";
           
         out += "</select>";
       out += "</div>";
@@ -230,6 +368,7 @@ String getTimeStampString() {
 void routeGetConfig() {
 
   #ifdef WEBAUTH
+  // TODO: Definitionen für User/Passwort
   if (!http->authenticate(clientId.c_str(), clientId.c_str())) {
       return http->requestAuthentication();
   }
@@ -257,6 +396,7 @@ void routeGetConfig() {
 void routeSetConfig() {
 
   #ifdef WEBAUTH
+  // TODO: Definitionen für User/Passwort
   if (!http->authenticate(clientId.c_str(), clientId.c_str())) {
       return http->requestAuthentication();
   }
@@ -281,21 +421,9 @@ void routeSetConfig() {
     String value;
     value = http->arg("currentMode");
     currentMode =  value.toInt();
-
     //manualOff = true;
     //dawnFlag = false;
-    
-    //settChanged = true;
-    //loadingFlag = true;
-    //FastLED.clear();
-    //delay(1);
-    //sendCurrent();
-    //FastLED.setBrightness(modes[currentMode].brightness);
-
-
     EepromManager::SaveModesSettings(&currentMode, modes);
-    //memcpy(buff, &inputBuffer[3], strlen(inputBuffer));   // взять подстроку, состоящую последних символов строки inputBuffer, начиная с символа 4
-    //currentMode = (uint8_t)atoi(buff);
     loadingFlag = true;
     settChanged = true;
     eepromTimeout = millis();
@@ -312,43 +440,65 @@ void routeSetConfig() {
     #endif
   }
 
-  //TODO
-  
-  /*
   if(http->hasArg("scale")){
-
     byte scale = http->arg("scale").toInt();
-    if (currentMode == 17 && scale > 100) scale = 100;
     
-    modes[currentMode].scale = scale;
+    modes[currentMode].Scale = scale;
     loadingFlag = true;
     settChanged = true;
-    eepromTimer = millis();
+    eepromTimeout = millis();
 
+    //sendCurrent(inputBuffer);
+
+    #if (USE_MQTT)
+    if (espMode == 1U)
+    {
+      MqttManager::needToPublish = true;
+    }
+    #endif
   }
-  
+
   if(http->hasArg("brightness")){
-    ONflag = true;    
-    modes[currentMode].brightness = http->arg("brightness").toInt();
+    modes[currentMode].Brightness = http->arg("brightness").toInt();
+    
+    ONflag = true;
     changePower();
-    FastLED.setBrightness(modes[currentMode].brightness);
+    
+    FastLED.setBrightness(modes[currentMode].Brightness);
 
-    sendCurrent();
-    settChanged = true;
-    eepromTimer = millis();
-
-  }
-  
-  if(http->hasArg("speed")){
-    modes[currentMode].speed = http->arg("speed").toInt();
     loadingFlag = true;
     settChanged = true;
-    eepromTimer = millis();
+    eepromTimeout = millis();
 
+    //sendCurrent(inputBuffer);
+
+    #if (USE_MQTT)
+    if (espMode == 1U)
+    {
+      MqttManager::needToPublish = true;
+    }
+    #endif
   }
-  */
+   
+  if(http->hasArg("speed")){
+    modes[currentMode].Speed = http->arg("speed").toInt();
+    loadingFlag = true;
+    settChanged = true;
+    eepromTimeout = millis();
+
+    //sendCurrent(inputBuffer);
+
+    #if (USE_MQTT)
+    if (espMode == 1U)
+    {
+      MqttManager::needToPublish = true;
+    }
+    #endif
+  }
+
   /** в знак завершения операции отправим текущую конфигурацию */
   routeGetConfig();
+  
   //MQTTUpdateState();
   
 }

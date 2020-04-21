@@ -169,6 +169,7 @@
 #include <FastLED.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <ESP8266HTTPUpdateServer.h>
 #include <WiFiManager.h>
 #include "CaptivePortalManager.h"
 #include <WiFiUdp.h>
@@ -203,6 +204,7 @@ WiFiServer wifiServer(ESP_HTTP_PORT);
 WiFiUDP Udp;
 
 ESP8266WebServer *http; // http server
+ESP8266HTTPUpdateServer *httpUpdater;
 
 #ifdef USE_NTP
 WiFiUDP ntpUDP;
