@@ -85,10 +85,12 @@ void effectsTick()
         case EFF_PAINTBALL:           lightBallsRoutine();                break;  // (56U) Пейнтбол
         case EFF_CUBE:                ballRoutine();                      break;  // (57U) Блуждающий кубик
         case EFF_COLORS:              colorsRoutine();                    break;  // (58U) Смена цвета
-        case EFF_TEXT:                text_running();                     break;  // (59U) Бегущая строка
+        case EFF_TEXT:                text_running();                     break;  // (62U) Бегущая строка
 
-        case EFF_SIMPLE_RAIN:         simpleRain();                       break;  // (60U) Тучка в банке
-        case EFF_STORMY_RAIN:         stormyRain();                       break;  // (61U) Гроза в банке
+        case EFF_SIMPLE_RAIN:         simpleRain();                       break;  // (59U) Тучка в банке
+        case EFF_STORMY_RAIN:         stormyRain();                       break;  // (60U) Гроза в банке
+
+        case EFF_TWINKLES:            twinklesRoutine();                  break;  // (61U) МЕРЦАНИЕ
         
         default:                                                          break;
       }

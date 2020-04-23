@@ -325,7 +325,8 @@ void routeHome(){
           out += "<option value='58'>58. Change of color</option>";
           out += "<option value='59'>59. Cloud in the jar</option>";
           out += "<option value='60'>60. Thunder in the jar</option>";
-          out += "<option value='61'>61. Ticker</option>";
+          out += "<option value='61'>61. Twinkles</option>";
+          out += "<option value='62'>62. Ticker</option>";
           
         out += "</select>";
       out += "</div>";

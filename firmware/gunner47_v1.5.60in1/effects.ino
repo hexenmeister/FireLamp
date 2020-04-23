@@ -17,7 +17,10 @@ void blurScreen(fract8 blur_amount, CRGB *LEDarray = leds)
 // добавлено изменение текущей палитры (используется во многих эффектах ниже для бегунка Масштаб)
 const TProgmemRGBPalette16 *palette_arr[] = {&PartyColors_p, &OceanColors_p, &LavaColors_p, &HeatColors_p, &WaterfallColors_p, &CloudColors_p, &ForestColors_p, &RainbowColors_p, &RainbowStripeColors_p};
 const TProgmemRGBPalette16 *curPalette = palette_arr[0];
-
+void setCurrentPallete(){
+      if (modes[currentMode].Scale > 100) modes[currentMode].Scale = 100; // чтобы не было проблем при прошивке без очистки памяти
+      curPalette = palette_arr[(int)((float)modes[currentMode].Scale/100*((sizeof(palette_arr)/sizeof(TProgmemRGBPalette16 *))-1U))];
+}
 
 // ------------- конфетти --------------
 #define FADE_OUT_SPEED        (70U)                         // скорость затухания
@@ -3597,4 +3600,58 @@ void stormyRain()
   // ( Depth of dots, maximum brightness, frequency of new dots, length of tails, color, splashes, clouds, ligthening )
   //rain(0, 90, map8(intensity,0,150)+60, 10, solidRainColor, true, true, true);
   rain(60, 160, (modes[currentMode].Scale-1), 30, solidRainColor, true, true, true);
+}
+
+// ------------------------------ ЭФФЕКТ МЕРЦАНИЕ ----------------------
+// (c) SottNick
+
+#define TWINKLES_SPEEDS 4     // всего 4 варианта скоростей мерцания
+#define TWINKLES_MULTIPLIER 6 // слишком медленно, если на самой медленной просто по единичке добавлять
+
+void twinklesRoutine(){
+    if (loadingFlag)
+    {
+      loadingFlag = false;
+      setCurrentPallete();
+      hue = 0U;
+      for (uint32_t idx=0; idx < NUM_LEDS; idx++) {
+        if (random8(modes[currentMode].Scale % 11U) == 0){
+          ledsbuff[idx].r = random8();                          // оттенок пикселя
+          ledsbuff[idx].g = random8(1, TWINKLES_SPEEDS * 2 +1); // скорость и направление (нарастает 1-4 или угасает 5-8)
+          ledsbuff[idx].b = random8();                          // яркость
+        }
+        else
+          ledsbuff[idx] = 0;                                    // всё выкл
+      }
+    }
+    for (uint32_t idx=0; idx < NUM_LEDS; idx++) {
+      if (ledsbuff[idx].b == 0){
+        if (random8(modes[currentMode].Scale % 11U) == 0 && hue > 0){  // если пиксель ещё не горит, зажигаем каждый ХЗй
+          ledsbuff[idx].r = random8();                          // оттенок пикселя
+          ledsbuff[idx].g = random8(1, TWINKLES_SPEEDS +1);     // скорость и направление (нарастает 1-4, но не угасает 5-8)
+          ledsbuff[idx].b = ledsbuff[idx].g;                    // яркость
+          hue--; // уменьшаем количество погасших пикселей
+        }
+      }
+      else if (ledsbuff[idx].g <= TWINKLES_SPEEDS){             // если нарастание яркости
+        if (ledsbuff[idx].b > 255U - ledsbuff[idx].g - TWINKLES_MULTIPLIER){            // если досигнут максимум
+          ledsbuff[idx].b = 255U;
+          ledsbuff[idx].g = ledsbuff[idx].g + TWINKLES_SPEEDS;
+        }
+        else
+          ledsbuff[idx].b = ledsbuff[idx].b + ledsbuff[idx].g + TWINKLES_MULTIPLIER;
+      }
+      else {                                                    // если угасание яркости
+        if (ledsbuff[idx].b <= ledsbuff[idx].g - TWINKLES_SPEEDS + TWINKLES_MULTIPLIER){// если досигнут минимум
+          ledsbuff[idx].b = 0;                                  // всё выкл
+          hue++; // считаем количество погасших пикселей
+        }
+        else
+          ledsbuff[idx].b = ledsbuff[idx].b - ledsbuff[idx].g + TWINKLES_SPEEDS - TWINKLES_MULTIPLIER;
+      }
+      if (ledsbuff[idx].b == 0)
+        leds[idx] = 0U;
+      else
+        leds[idx] = ColorFromPalette(*curPalette, ledsbuff[idx].r, ledsbuff[idx].b);
+    }
 }
