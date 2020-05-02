@@ -1,0 +1,32 @@
+
+/* 
+ TODO:
+  - neue WebUI
+    - Abfragen von Systemparametern und Änderung
+    - Drawing
+    - Text-Ausgabe
+    - Favoriten-Auswahl und -Loop
+  - MQTT 
+    - Parameter in EEPROM speichern
+    - Parameter über WebUI ändern
+    - Neue Topics (wie es mir besser passt - Werte einzeln, JSON?)
+    - LWT
+    - Sensoren Werte ausgaben
+  - Unterstützung PIR
+    - Senden per MQTT
+    - Reaktionen in Firmware?
+  - Unterstützung Lichtsensor
+    - Senden per MQTT
+    - Reaktionen in Firmware?
+  - Unerstützung Microphone (max9814 - with auto gain)
+    - Senden per MQTT
+    - Reaktionen in Firmware?
+    - Musik-Effekte?
+  - Unterstützung Tonausgabe
+    - Buzzer?
+    - MP3-Modul (dfplayer)?
+    - Button-Feedback?
+    - Wecker
+  - Unterstützung Steuerung per IR? (HX1838?) https://de.aliexpress.com/item/32828416351.html
+
+*/
