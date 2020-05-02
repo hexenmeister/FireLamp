@@ -166,6 +166,7 @@
 
 #include "pgmspace.h"
 #include "Constants.h"
+//#define FASTLED_USE_PROGMEM 1
 #include <FastLED.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
@@ -176,6 +177,7 @@
 #include <ESP8266mDNS.h>
 #include <EEPROM.h>
 #include "Types.h"
+#include "effectDefinitions.h"
 #include "timerMinim.h"
 #ifdef ESP_USE_BUTTON
 #include <GyverButton.h>

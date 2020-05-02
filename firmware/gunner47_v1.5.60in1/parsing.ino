@@ -332,19 +332,22 @@ void processInputBuffer(char *inputBuffer, char *outputBuffer, bool generateOutp
          {
            case 1U:
            {
-             Udp.write(efList_1.c_str());
+             //Udp.write(efList_1.c_str());
+             Udp.write(getEffectsList(0, true).c_str());
              Udp.write("\0");
              break;
            }
            case 2U:
            {
-             Udp.write(efList_2.c_str());
+             //Udp.write(efList_2.c_str());
+             Udp.write(getEffectsList(1, true).c_str());
              Udp.write("\0");
              break;
            }
            case 3U:
            {
-             Udp.write(efList_3.c_str());
+             //Udp.write(efList_3.c_str());
+             Udp.write(getEffectsList(2, true).c_str());
              Udp.write("\0");
 
              #ifdef USE_DEFAULT_SETTINGS_RESET

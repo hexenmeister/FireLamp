@@ -21,6 +21,15 @@ void initWebserver() {
     /** root page */
     http->on("/", routeHome);
 
+    /** get effects JSON */
+    http->on("/geteffects", routeGetEffects); 
+
+    /** start OTA */
+    http->on("/ota", routeOTA); 
+    
+    /** test */
+    http->on("/test", routeTest);
+    
     /** get config JSON */
     http->on("/getconfig", routeGetConfig); 
 
@@ -42,6 +51,49 @@ void initWebserver() {
   } else {
     LOG.println("Error creating webserver!");
   }
+}
+
+/**
+ * send effects list in App format
+ */
+void routeTest() {
+  String out = getEffectsList(0, true);
+  out+= "\n";
+  out+= getEffectsList(1, true);
+  out+= "\n";
+  out+= getEffectsList(2, true);
+  out+= "\n";
+  
+  http->send(200, "text/plain", out);
+}
+
+/**
+ * start OTA
+ */
+void routeOTA() {
+  #ifdef WEBAUTH
+  // TODO: Definitionen für User/Passwort
+  if (!http->authenticate(clientId.c_str(), clientId.c_str())) {
+      return http->requestAuthentication();
+  }
+  #endif
+
+  String out;
+  #ifdef OTA
+  otaManager.RequestOtaUpdate();
+  delay(50);
+  otaManager.RequestOtaUpdate();
+  currentMode = EFF_MATRIX;                             // принудительное включение режима "Матрица" для индикации перехода в режим обновления по воздуху
+  FastLED.clear();
+  delay(1);
+  ONflag = true;
+  changePower();
+  out="{\"Status\":\"OTA ready\"}";
+  #else
+  out="{\"Status\":\"OTA Disabled\"}";
+  #endif
+
+  http->send(200, "application/json", out);
 }
 
 /*
@@ -261,7 +313,7 @@ void routeHome(){
       out += "</div>";
       
       out += "<div class='ui-field-contain'>";
-        out += "<label for='currentMode'>Effekt:</label>";
+        out += "<label for='currentMode'>Effect:</label>";
         out += "<select name='currentMode' id='currentMode' data-mini='true'>";
 
           out += "<option value='0'>0. White Color</option>";
@@ -364,6 +416,23 @@ String getTimeStampString() {
 
 
 /**
+ * send effects list JSON
+ */
+void routeGetEffects() {
+  #ifdef WEBAUTH
+  // TODO: Definitionen für User/Passwort
+  if (!http->authenticate(clientId.c_str(), clientId.c_str())) {
+      return http->requestAuthentication();
+  }
+  #endif
+
+  String out = getEffectsListJson(true);
+
+  http->send(200, "application/json", out);
+}
+
+
+/**
  * send config data JSON
  */
 void routeGetConfig() {
@@ -388,7 +457,7 @@ void routeGetConfig() {
   out += "\"espMode\": " + String(espMode);
   out += "}";
   
-  http->send(200, "text/json", out);
+  http->send(200, "application/json", out);
 }
 
 /**
