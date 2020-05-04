@@ -23,19 +23,24 @@ void initWebserver() {
 
     /** get effects JSON */
     http->on("/geteffects", routeGetEffects); 
-
-    /** start OTA */
-    http->on("/ota", routeOTA); 
     
     /** test */
-    http->on("/test", routeTest);
+    http->on("/test", routeTest); // TODO DEL
     
     /** get config JSON */
     http->on("/getconfig", routeGetConfig); 
 
     /** send confid */
-    http->on("/setconfig", routeSetConfig); 
+    http->on("/setconfig", routeSetConfig);
 
+    /** get system config JSON */
+    http->on("/getsysconfig", routeGetSysConfig); 
+
+     /** send system confid */
+    http->on("/setsysconfig", routeSetSysConfig);
+     
+    /** start OTA */
+    http->on("/ota", routeOTA); // TODO => SYS CONFIG?
     
     // TODO
 
@@ -88,9 +93,9 @@ void routeOTA() {
   delay(1);
   ONflag = true;
   changePower();
-  out="{\"Status\":\"OTA ready\"}";
+  out="{\"Status\": \"OK\", \"OTA\": \"ready\"}";
   #else
-  out="{\"Status\":\"OTA Disabled\"}";
+  out="{\"Status\": \"OK\", \"OTA\": \"disabled\"}";
   #endif
 
   http->send(200, "application/json", out);
@@ -571,6 +576,94 @@ void routeSetConfig() {
   
   //MQTTUpdateState();
   
+}
+
+/**
+ * send system config data JSON
+ */
+void routeGetSysConfig() {
+
+  #ifdef WEBAUTH
+  // TODO: Definitionen für User/Passwort
+  if (!http->authenticate(clientId.c_str(), clientId.c_str())) {
+      return http->requestAuthentication();
+  }
+  #endif
+
+  String out;
+
+  out += "{";
+  out += "\"status\": \"ok\", ";
+  out += "\"ChipID\": \""+String(ESP.getChipId(), HEX)+"\", ";
+  // TODO out += "\"ClientID\": \""+clientId+"\", ";
+
+  out+= "\"network\": {";
+  out += "\"WIFI_MODE\": \""+String(espMode)+"\"";
+  // TODO: RSSI  
+  out+= "}, ";
+
+  out+= "\"network\": {";
+  //out += "\"HTTP_PORT\": \""+String(ESP_HTTP_PORT)+"\", ";
+  out += "\"UDP_PORT\": \""+String(ESP_UDP_PORT)+"\"";
+  out+= "}, ";
+
+  out+= "\"pins\": {";
+  out += "\"LED_PIN\": \""+String(LED_PIN)+"\", ";
+  out += "\"BTN_PIN\": \""+String(BTN_PIN)+"\", ";
+  out += "\"MOSFET_PIN\": \""+String(MOSFET_PIN)+"\" ,";
+  out += "\"ALARM_PIN\": \""+String(ALARM_PIN)+"\", ";
+  out += "\"MOSFET_LEVEL\": \""+String(MOSFET_LEVEL)+"\", ";
+  out += "\"ALARM_LEVEL\": \""+String(ALARM_LEVEL)+"\"";
+  out+= "}, ";
+
+  out+= "\"matrix\": {";
+  out += "\"CURRENT_LIMIT\": \""+String(CURRENT_LIMIT)+"\", ";
+  out += "\"WIDTH\": \""+String(WIDTH)+"\", ";
+  out += "\"HEIGHT\": \""+String(HEIGHT)+"\", ";
+  out += "\"MATRIX_TYPE\": \""+String(MATRIX_TYPE)+"\", ";
+  out += "\"CONNECTION_ANGLE\": \""+String(CONNECTION_ANGLE)+"\", ";
+  out += "\"CONNECTION_ANGLE\": \""+String(CONNECTION_ANGLE)+"\"";
+  out+= "}, ";
+
+
+  out+= "\"mqtt\": {";
+  #ifdef USE_MQTT
+  out += "\"status\": \"enabled\",";
+  out += "\"MQTT_RECONNECT_TIME\": \""+String(MQTT_RECONNECT_TIME)+"\"";
+  // TODO: für Folgendes Methode in MqttManager einbauen
+  /*
+  out += "\"TopicBase\": \""+String(TopicBase)+"\",";
+  out += "\"TopicCmnd\": \""+String(TopicCmnd)+"\",";
+  out += "\"TopicState\": \""+String(TopicState)+"\",";
+  out += "\"MqttServer\": \""+String(MqttServer)+"\",";
+  out += "\"MqttPort\": \""+String(MqttPort)+"\",";
+  out += "\"MqttClientIdPrefix\": \""+String(MqttClientIdPrefix)+"\"";
+  */
+  // TODO?
+  #else
+  out += "\"status\": \"disabled\"";
+  #endif
+  out+= "}";
+  
+  out += "}";
+  
+  http->send(200, "application/json", out);
+}
+
+
+/**
+ * change system parameters
+ */
+void routeSetSysConfig() {
+
+  #ifdef WEBAUTH
+  // TODO: Definitionen für User/Passwort
+  if (!http->authenticate(clientId.c_str(), clientId.c_str())) {
+      return http->requestAuthentication();
+  }
+  #endif
+
+  // TODO
 }
 
 /**
