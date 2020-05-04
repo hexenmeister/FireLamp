@@ -158,14 +158,77 @@ static const EffectType effects[] PROGMEM = {
 };
 const uint8_t MODE_AMOUNT = ARRAY_ROWS(effects);
 
-static String getEffectsListJson(bool withNumbers) {
+
+static EffectType getEffect(uint8_t num) {
+  EffectType effect;
+
+  effect.Id = pgm_read_byte(&effects[num].Id);
+  strcpy_P (effect.Name, effects[num].Name);
+  effect.SpeedMin= pgm_read_byte(&effects[num].SpeedMin);
+  effect.SpeedMax= pgm_read_byte(&effects[num].SpeedMax);
+  effect.ScaleMin= pgm_read_byte(&effects[num].ScaleMin);
+  effect.ScaleMax= pgm_read_byte(&effects[num].ScaleMax);
+  effect.ScaleType= pgm_read_byte(&effects[num].ScaleType);
+  effect.defaultBrightness= pgm_read_byte(&effects[num].defaultBrightness);
+  effect.defaultSpeed= pgm_read_byte(&effects[num].defaultSpeed);
+  effect.defaultScale= pgm_read_byte(&effects[num].defaultScale);
+  
+  return effect;
+}
+
+static String getEffectsListJson(bool withNumbers=false, bool withParams=true, bool withDefaults=false) {
   String ret = String("{\"effectsCount\":")+String(MODE_AMOUNT);
   ret+= String(", \"effects\":");
 
   ret+="[";
   for (uint8_t i = 0; i < MODE_AMOUNT; i++) {
+    EffectType effect = getEffect(i);
     ret+="{";
 
+    ret+="\"id\": ";
+    ret+= String(effect.Id);
+    ret+=", ";
+
+    ret+="\"num\": ";
+    ret+= i;
+    ret+=", ";
+
+    ret+="\"name\": \"";
+    if(withNumbers){
+      ret+= i;
+      ret+=". ";
+    }
+    ret+=String(effect.Name);
+    ret+="\"";
+
+    if(withParams) {
+      ret+=", ";
+      ret+="\"param\": {";
+  
+      ret+="\"Speed\": {";
+      ret+="\"min\": "+String(effect.SpeedMin)+", ";
+      ret+="\"max\": "+String(effect.SpeedMax);
+      ret+="}, ";
+      
+      ret+="\"Scale\": {";
+      ret+="\"min\": "+String(effect.ScaleMin)+", ";
+      ret+="\"max\": "+String(effect.ScaleMax)+", ";
+      ret+="\"type\": "+String(effect.ScaleType);
+      ret+="}";
+        
+      ret+="}";
+    }
+
+    if(withDefaults) {
+      ret+=", ";
+      ret+="\"default\": {";
+      ret+="\"brightness\": "+String(effect.defaultBrightness)+",";
+      ret+="\"speed\": "+String(effect.defaultSpeed)+", ";
+      ret+="\"scale\": "+String(effect.defaultScale);
+      ret+="}";
+    }
+    
+  /*
     ret+="\"id\": ";
     ret+= pgm_read_byte(&effects[i].Id);
     ret+=", ";
@@ -184,6 +247,7 @@ static String getEffectsListJson(bool withNumbers) {
     strcpy_P (buf, effects[i].Name);
     ret+= String(buf);
     ret+="\"";
+  */
 
     ret+="}";
     
@@ -194,23 +258,6 @@ static String getEffectsListJson(bool withNumbers) {
   ret+="]";
   ret+="}";
   return ret;
-}
-
-static EffectType getEffect(uint8_t num) {
-  EffectType effect;
-
-  effect.Id = pgm_read_byte(&effects[num].Id);
-  strcpy_P (effect.Name, effects[num].Name);
-  effect.SpeedMin= pgm_read_byte(&effects[num].SpeedMin);
-  effect.SpeedMax= pgm_read_byte(&effects[num].SpeedMax);
-  effect.ScaleMin= pgm_read_byte(&effects[num].ScaleMin);
-  effect.ScaleMax= pgm_read_byte(&effects[num].ScaleMax);
-  effect.ScaleType= pgm_read_byte(&effects[num].ScaleType);
-  effect.defaultBrightness= pgm_read_byte(&effects[num].defaultBrightness);
-  effect.defaultSpeed= pgm_read_byte(&effects[num].defaultSpeed);
-  effect.defaultScale= pgm_read_byte(&effects[num].defaultScale);
-  
-  return effect;
 }
 
 static ModeType getEffectDefaultSetting(uint8_t num) {
