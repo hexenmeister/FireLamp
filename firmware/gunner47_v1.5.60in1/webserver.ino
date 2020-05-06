@@ -41,6 +41,9 @@ void initWebserver() {
      
     /** start OTA */
     http->on("/ota", routeOTA); // TODO => SYS CONFIG?
+
+    /** reset */
+    http->on("/reset", routeReset); // TODO => SYS CONFIG?
     
     // TODO
 
@@ -100,6 +103,24 @@ void routeOTA() {
 
   http->send(200, "application/json", out);
 }
+
+/**
+ * reset ESP
+ */
+void routeReset() {
+  #ifdef WEBAUTH
+  // TODO: Definitionen für User/Passwort
+  if (!http->authenticate(clientId.c_str(), clientId.c_str())) {
+      return http->requestAuthentication();
+  }
+  #endif
+
+  String out = "{\"Status\": \"OK\"}";
+  http->send(200, "application/json", out);
+  ESP.reset();
+}
+
+
 
 /*
 void routeUpload() {
