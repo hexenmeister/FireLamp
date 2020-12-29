@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="main.css" rel="stylesheet" type="text/css" />
+      <link href="menu.css" rel="stylesheet" type="text/css" />
+      <link href="controls.css" rel="stylesheet" type="text/css" />
+      <script src="scripts.js"></script>
+   </head>
+   <body>
+      <!-- begin menu -->
+      <div id="mySidebar" class="sidebar">
+        <a class="closebtn" onclick="closeNav()">&#9776;</a>
+        <a href="main.html">Steuerung</a>
+        <a href="#">Favoriten</a>
+        <a href="#">Leinwand</a>
+        <a href="#">Wecker</a>
+        <a class="selentry" href="#">Einstellungen</a>
+        <div style="position: absolute;  bottom:65px; left:10px; color:#ffffff;">
+        <div id="version">Version x.x</div>
+        <div id="time">23.05.2020 12:32</div>
+      </div>
+         
+      </div>
+      <button id="menubtn" class="openbtn" onclick="openNav()">&#9776;</button>  
+      <!-- end menu -->
+      
+      <!-- begin content -->
+      <div id="main">
+       <h1>Fire Lamp</h1>
+      
+         <h2>Einstellungen</h2>
+         
+         
+         display: grid; grid-template-rows:200px 1fr 100px; grid-template-columns:25% 25% 25% 25%; 
+         
+         
+         <p>Parameter 1:</p>
+         <div class="shiftr" style="margin-bottom:5pt;">
+           <span style="min-width: 150pt;">Param1: </span><input type="text" class="text-input" >
+         </div>
+         
+         <div class="shiftr" style="margin-bottom:5pt;">
+           <span>Param2: </span><input type="text" class="text-input" >
+         </div>
+
+	   <!--
+       <div class="shiftr" style="margin-bottom:5pt;">
+		 <span style="display: grid; grid-template-columns:70pt 100pt">
+           <span>Param3.1: </span><input type="text" class="text-input" >
+         </span>
+         <span style="display: grid; grid-template-columns:70pt 100pt">
+           <span>Param3.2: </span><input type="text" class="text-input" >
+         </span>
+       </div>-->
+       
+       <!--
+       <div class="shiftr" style="margin-bottom:5pt; display: grid; grid-template-columns:70pt 100pt 70pt 100pt;">
+         <span>Param4.1: </span><input type="text" class="text-input " >
+         <span>Param4.2: </span><input type="text" class="text-input " >
+       </div>-->
+       
+       <div class="row shiftr">
+         <span class="columns">Param 4.1: </span><input type="text" class="text-input columns" >
+         <span class="columns">Param 4.2: </span><input type="text" class="text-input columns" >
+       </div>
+       
+       <div class="row shiftr">
+         <span class="columns">Param123 5.1: </span><input type="text" class="text-input columns" >
+         <span class="columns">Param123 5.2: </span><input type="text" class="text-input columns" >
+       </div>
+       
+         <p>Todo.</p>
+      </div>
+      <!-- end content -->
+      
+      <script>onResize();window.onresize=onResize;</script>
+   </body>
+</html>
+

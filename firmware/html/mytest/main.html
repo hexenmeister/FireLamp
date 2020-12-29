@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="main.css" rel="stylesheet" type="text/css" />
+      <link href="menu.css" rel="stylesheet" type="text/css" />
+      <link href="controls.css" rel="stylesheet" type="text/css" />
+      <script src="scripts.js"></script>
+   </head>
+   <body>
+      <!-- begin menu -->
+      <div id="mySidebar" class="sidebar">
+         <a class="closebtn" onclick="closeNav()">&#9776;</a>
+         <a class="selentry" href="#">Steuerung</a>
+         <a href="#">Favoriten</a>
+         <a href="#">Leinwand</a>
+         <a href="#">Wecker</a>
+         <a href="settings.html">Einstellungen</a>
+         <div style="position: absolute;  bottom:65px; left:10px; color:#ffffff;">
+			<div id="version">Version x.x</div>
+			<div id="time">23.05.2020 12:32</div>
+         </div>
+         
+      </div>
+      <button id="menubtn" class="openbtn" onclick="openNav()">&#9776;</button>  
+      <!-- end menu -->
+      
+      <!-- begin content -->
+      <div id="main">
+         <h1>Fire Lamp</h1>
+         
+         <h2>Lichteffekte</h2>
+         
+         <div Xclass="container" Xstyle="border:1px solid;">
+         
+         <!--<p>Power:</p>-->
+         <!--<div class="shiftr">-->
+           <label class="switch">
+		     <input type="checkbox" class="switch-input" Xchecked>
+             <span class="switch-label" data-on="On" data-off="Off"></span>
+		     <span class="switch-handle"></span>
+		   </label>
+		 <!--</div>-->
+    
+	<!--
+    <label class="switch switch-green">
+      <input type="checkbox" class="switch-input" checked>
+      <span class="switch-label" data-on="On" data-off="Off"></span>
+      <span class="switch-handle"></span>
+    </label>
+    -->  
+    
+         <p>Effekt:</p>
+         <div class="shiftr">
+         <label class="select">
+           <span class="select-label">
+             <select name="effect" id="ieffect" class="select-input" size="1">
+               <option style="">01 Color</option>
+               <option style="">02 Fire</option>
+               <option style="">03 Bouncing Balls</option>
+             </select>
+           </span>
+         </label>
+         </div>
+         
+         <p>Helligkeit:</p>
+         <div class="shiftr">
+         <label class="slider">
+           <span class="slider-label gradient">
+             <input value="10" type="range" class="slider-input" id="ibrightness" name="brightness" min="0" max="100">
+           </span>
+         </label>
+         </div>
+         
+         <p>Geschwindigkeit:</p>
+         <div class="shiftr">
+         <label class="slider">
+           <span class="slider-label simplebar">
+             <input value="10" type="range" class="slider-input" id="ispeed" name="speed" min="0" max="100">
+		   </span>
+         </label>
+         </div>
+         
+         <p>Skalierung:</p>
+         <div class="shiftr">
+         <label class="slider">
+           <span class="slider-label rainbow">
+             <input style="position:absolute;width:40px; left:-40px; border:none;background:none; text-shadow: 0 1px rgba(255, 255, 255, 0.5);color:#ccc;" 
+               type="number" id="viscale" value="" onchange="updVal(this.id.substring(1), this.value);" min="0" max="100" >
+             <input value="10" type="range" class="slider-input" id="iscale" name="scale" min="0" max="100" 
+               onchange="updVal('v'+this.id, this.value);">
+           </span>
+         </label>
+         </div>
+         
+         </div>
+         
+      </div>
+      <!-- end content -->
+      
+      <script>onResize();window.onresize=onResize;</script>
+   </body>
+</html>
+

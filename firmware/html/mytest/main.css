@@ -1,0 +1,37 @@
+:root {
+  --cl-main-background: #ffffff; /*#fcffff;*/
+  --cl-main-text: #008fb3;
+  --cl-menu-background: #008fb3;
+  --cl-menu-btn-background-open: #008fb3;
+  --cl-menu-btn-background-close: #008fb3;
+  --cl-menu-btn-background-hover: #00a3cc;
+  --cl-menu-items-text: #ffffff;
+  --cl-menu-items-text-hover: #ccf5ff;
+  --cl-menu-items-back-hover: #00a3cc;
+  --cl-menu-items-back-active: #00ABD6;
+}
+
+.shiftr {
+  padding-left:30px;
+  margin-right:30px;
+}
+
+
+.row {
+  width:auto;
+}
+
+.row:before,
+.row:after {
+  content: " ";
+  display: table;
+}
+
+.row:after {
+  clear: both;
+}
+
+.columns {
+  float:left;
+  margin-right: 5pt;
+}

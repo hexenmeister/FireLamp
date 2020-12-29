@@ -1,0 +1,90 @@
+body {
+  font-family: "Lucida Grande", "Lato", Arial, sans-serif;
+  margin: 0px;
+  background-color: var(--cl-main-background);
+}
+
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: var(--cl-menu-background);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: var(--cl-menu-items-text);
+  display: block;
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  color: var(--cl-menu-items-text-hover);
+  background: var(--cl-menu-items-back-hover);
+}
+
+.sidebar .closebtn {
+  position:absolute;
+  top:0;
+  left:0px;
+  margin-left:0px;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px 15px;
+  background: var(--cl-menu-btn-background-close);
+  color: white;
+}
+
+.sidebar .selentry {
+  background: var(--cl-menu-items-back-active);
+}
+
+.closebtn:hover {
+  background-color: var(--cl-menu-btn-background-hover) !important;
+}
+
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: var(--cl-menu-btn-background-close);
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  margin: 0px;
+}
+
+.openbtn:hover {
+  background-color: var(--cl-menu-btn-background-hover);
+}
+
+#main {
+  transition: margin-left .5s;
+  /*padding: 16px;*/
+  padding-left: 56px;
+  padding-right: 56px;
+  
+  margin-left: 250px; /* x */
+  
+  margin-top: -60px;
+  
+  color: var(--cl-main-text);
+  
+}
+
+#mySidebar {
+  width: 250px; /* x */
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+/*@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}*/

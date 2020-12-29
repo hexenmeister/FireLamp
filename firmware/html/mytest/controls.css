@@ -1,0 +1,518 @@
+/* Switch-Button Copyright 2013 Thibaut Courouble; MIT licensed */
+
+/*
+*:focus {
+  outline: 1px solid white;
+}*/
+
+.switch {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: 56px;
+  height: 20px;
+  padding: 3px;
+  background-color: white;
+  border-radius: 18px;
+  box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  background-image: -webkit-linear-gradient(top, #eeeeee, white 25px);
+  background-image: -moz-linear-gradient(top, #eeeeee, white 25px);
+  background-image: -o-linear-gradient(top, #eeeeee, white 25px);
+  background-image: linear-gradient(to bottom, #eeeeee, white 25px);
+}
+
+.switch-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.switch-label {
+  position: relative;
+  display: block;
+  height: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+  background: #eceeef;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12),
+    inset 0 0 2px rgba(0, 0, 0, 0.15);
+  -webkit-transition: 0.15s ease-out;
+  -moz-transition: 0.15s ease-out;
+  -o-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-transition-property: opacity background;
+  -moz-transition-property: opacity background;
+  -o-transition-property: opacity background;
+  transition-property: opacity background;
+}
+.switch-label:before,
+.switch-label:after {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+  line-height: 1;
+  -webkit-transition: inherit;
+  -moz-transition: inherit;
+  -o-transition: inherit;
+  transition: inherit;
+}
+.switch-label:before {
+  content: attr(data-off);
+  right: 11px;
+  color: #aaa;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+}
+.switch-label:after {
+  content: attr(data-on);
+  left: 11px;
+  color: white;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+}
+.switch-input:checked ~ .switch-label {
+  background: #1ab2ff;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15),
+    inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+.switch-input:checked ~ .switch-label:before {
+  opacity: 0;
+}
+.switch-input:checked ~ .switch-label:after {
+  opacity: 1;
+}
+
+.switch-handle {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  background-image: -webkit-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -moz-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -o-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: linear-gradient(to bottom, white 40%, #f0f0f0);
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out;
+}
+.switch-handle:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -6px 0 0 -6px;
+  width: 12px;
+  height: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+  background-image: -webkit-linear-gradient(top, #eeeeee, white);
+  background-image: -moz-linear-gradient(top, #eeeeee, white);
+  background-image: -o-linear-gradient(top, #eeeeee, white);
+  background-image: linear-gradient(to bottom, #eeeeee, white);
+}
+.switch-input:checked ~ .switch-handle {
+  left: 40px;
+  box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.switch-green > .switch-input:checked ~ .switch-label {
+  background: #4fb845;
+}
+
+
+/* Copyright 2020 Alexander Schulz; MIT licensed */
+
+/* input control: slider */
+
+.slider {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: 100%;
+  height: 22px;
+  padding: 3px;
+  background-color: white;
+  border-radius: 18px;
+  box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  background-image: -webkit-linear-gradient(top, #eeeeee, white 25px);
+  background-image: -moz-linear-gradient(top, #eeeeee, white 25px);
+  background-image: -o-linear-gradient(top, #eeeeee, white 25px);
+  background-image: linear-gradient(to bottom, #eeeeee, white 25px);
+}
+
+.slider-label {
+  position: relative;
+  display: block;
+  height: inherit;
+  xpadding-left: 1px;
+  xpadding-right: 1px;
+  font-size: 10px;
+  text-transform: uppercase;
+  background: #eceeef;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12),
+    inset 0 0 2px rgba(0, 0, 0, 0.15);
+  -webkit-transition: 0.15s ease-out;
+  -moz-transition: 0.15s ease-out;
+  -o-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-transition-property: opacity background;
+  -moz-transition-property: opacity background;
+  -o-transition-property: opacity background;
+  transition-property: opacity background;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 20px;
+  xmargin: 10px 50px;
+  xposition: absolute;
+  xposition: relative;
+  xdisplay: inline-block;
+  xleft: 0px;
+  xright: 11px;
+  xtop: 50%;
+  xmargin-top: -0.05em;
+  margin-top: 0px;
+  xline-height: 1;
+  margin-left: auto;
+  margin-right: auto;
+  xpaddinf-left: 10px;
+  padding-right: 10px;
+  xbackground: linear-gradient(to right, #333333 0%, #bbbbbb 100%);
+  xbackground-size: 90% 01px;
+  xbackground-position: center;
+  xbackground-repeat: no-repeat;
+  background: transparent;
+  overflow: hidden;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  xbox-shadow: 0.9px 0.9px 0.9px #000031, 0px 0px 0.9px #00004b;
+  xborder: 1.5px solid #00001e;
+  height: 18px;
+  width: 18px;
+  xborder-radius: 18px;
+  xbackground: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  xmargin-top: -3.8px;
+
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  background-image: -webkit-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -moz-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -o-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: linear-gradient(to bottom, white 40%, #f0f0f0);
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out;
+}
+
+input[type="range"]::-moz-range-thumb {
+  box-shadow: 0.9px 0.9px 0.9px #000031, 0px 0px 0.9px #00004b;
+  xborder: 1.5px solid #00001e;
+  height: 18px;
+  width: 18px;
+  xborder-radius: 18px;
+  xbackground: #ffffff;
+  xcursor: pointer;
+
+  xbackground: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  background-image: -webkit-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -moz-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -o-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: linear-gradient(to bottom, white 40%, #f0f0f0);
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out;
+}
+
+input[type="range"]::-ms-thumb {
+  xbox-shadow: 0.9px 0.9px 0.9px #000031, 0px 0px 0.9px #00004b;
+  border: 1px solid #b0b0b0;
+  height: 18px;
+  width: 18px;
+  border-radius: 18px;
+  xbackground: #ffffff;
+  xcursor: pointer;
+  height: 18px;
+
+  xborder-radius: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  background-image: -webkit-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -moz-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: -o-linear-gradient(top, white 40%, #f0f0f0);
+  background-image: linear-gradient(to bottom, white 40%, #f0f0f0);
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out;
+}
+
+input[type="range"]::-ms-track {
+  background: transparent;
+  height: 0px;
+  border: none;
+}
+
+.slider-input {
+}
+
+
+/*
+.slider-label::before {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+  line-height: 1;
+  -webkit-transition: inherit;
+  -moz-transition: inherit;
+  -o-transition: inherit;
+  transition: inherit;
+  left: -11px;
+  color: #aaa;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+  content: attr(data);
+}
+*/
+
+/* input control: select */
+
+.select {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  Xwidth: 90%;
+  width: 100%;
+  height: 22px;
+  padding: 3px;
+  background-color: white;
+  border-radius: 18px;
+  box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  background-image: -webkit-linear-gradient(top, #eeeeee, white 25px);
+  background-image: -moz-linear-gradient(top, #eeeeee, white 25px);
+  background-image: -o-linear-gradient(top, #eeeeee, white 25px);
+  background-image: linear-gradient(to bottom, #eeeeee, white 25px);
+}
+
+.select-label {
+  position: relative;
+  display: block;
+  height: inherit;
+  xpadding-left: 1px;
+  xpadding-right: 1px;
+  
+  Xtext-transform: uppercase;
+  background: #1ab2ff; /*#eceeef;*/
+  border-radius: inherit;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12),
+    inset 0 0 2px rgba(0, 0, 0, 0.15);
+  -webkit-transition: 0.15s ease-out;
+  -moz-transition: 0.15s ease-out;
+  -o-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-transition-property: opacity background;
+  -moz-transition-property: opacity background;
+  -o-transition-property: opacity background;
+  transition-property: opacity background;
+}
+
+.select-input {
+  /* remove standard styles*/
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border:none;
+  border-radius: 0;
+  font-size: 1em;
+  width: 100%;
+  height: 23px;
+  
+  /* remove outline */ 
+  outline: 1px solid white;
+  outline: none;
+  outline-style: none;
+  
+  /* styling */
+  background: transparent;
+  color: #ffffff; /*var(--cl-main-text);*/
+  padding-top:0px;
+  padding-left:10px;
+  font-size: 1em;
+  line-height: 1.3;
+  Xfont-family: sans-serif;
+  Xfont-size: 12px;
+  Xfont-weight: bold;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+  
+  cursor: pointer;
+}
+
+select::-ms-expand {
+  /* For IE10 */
+  display: none;
+}
+
+
+.select-input > option {
+  background: #1ab2ff;
+  color: #ffffff;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+}
+
+/*
+select:focus {
+    
+}*/
+
+/*
+option {
+  border-top:10px solid #444;
+  padding:13em 11em 13em 11em;
+}*/
+
+.select-label::before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -3px;
+    border-width: 6px 6px 0 6px;
+    border-style: solid;
+    border-color: #ccf5ff transparent;
+    pointer-events: none;
+}
+
+
+/* gradients */
+
+.rainbow {
+  height: 20px;
+  border-radius: 18px;
+  background: lightgray; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(
+    left,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    indigo,
+    violet,
+    #ff0033
+  ); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(
+    right,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    indigo,
+    violet,
+    #ff0033
+  ); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(
+    right,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    indigo,
+    violet,
+    #ff0033
+  ); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(
+    to right,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    indigo,
+    violet,
+    #ff0033
+  ); /* Standard syntax (must be last) */
+
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15),
+    inset 0 0 3px rgba(0, 0, 0, 0.2);
+  margin-top: 1px;
+  display: block;
+
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+.gradient {
+  height: 20px;
+  border-radius: 18px;
+  background: lightgray; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(
+    left,
+    black,
+    lightgray
+  ); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(
+    right,
+    black,
+    lightgray
+  ); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(
+    right,
+    black,
+    lightgray
+  ); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(
+    to right,
+    #006699,
+    #b3e6ff
+  ); /* Standard syntax (must be last) */
+
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15),
+    inset 0 0 3px rgba(0, 0, 0, 0.2);
+  margin-top: 1px;
+  display: block;
+
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+.simplebar {
+  height: 20px;
+  border-radius: 18px;
+  background: #1ab2ff;
+
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15),
+    inset 0 0 3px rgba(0, 0, 0, 0.2);
+  margin-top: 1px;
+  display: block;
+
+  padding-left: 1px;
+  padding-right: 1px;
+}
